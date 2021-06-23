@@ -15,7 +15,9 @@ Use 'PortForwardApps APPNAME' to get port
 python main.py
 
 Enter App Name
+
 Enter Port
+
 Enter 1 tag id if you are exporting a subset of tags
 
 Output will tell you how many of each section and how many exported
