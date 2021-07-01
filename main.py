@@ -135,31 +135,33 @@ Only import contacts who have a specific tag (ID)? (leave blank for all):  """)
     print('Orders: ' + str(start_count_order))
     order_job_export = adt.export_job(source, contact_ids)
     print('Exported Orders: ' + str(len(order_job_export)))
-    if tag_id:
-        job_ids = order_job_export['Id'].tolist()
-        job_ids = list(set(job_ids))
-    order_job_export.to_csv(f'{rel_dir}/Jobs.csv', encoding='utf-8', index=False, header=True)
+    if len(order_job_export) != 0:
+        if tag_id:
+            job_ids = order_job_export['Id'].tolist()
+            job_ids = list(set(job_ids))
+        order_job_export.to_csv(f'{rel_dir}/OrderNoItems.csv', encoding='utf-8', index=False, header=True)
 
-    order_item_export = adt.export_order_item(source, job_ids)
-    if tag_id:
-        product_ids = order_item_export['ProductId'].tolist()
-    #product_ids = list(set(product_ids))
-    print('Exported order items: ' + str(len(order_item_export)))
-    order_item_export.to_csv(f'{rel_dir}/OrderItems.csv', encoding='utf-8', index=False, header=True)
+        order_item_export = adt.export_order_item(source, job_ids)
+        if tag_id:
+            product_ids = order_item_export['ProductId'].tolist()
+        #product_ids = list(set(product_ids))
+        print('Exported order items: ' + str(len(order_item_export)))
+        order_item_export.to_csv(f'{rel_dir}/OrderItems.csv', encoding='utf-8', index=False, header=True)
 
-    payment_export = adt.export_payment(source, job_ids)
-    print('Exported payments: ' + str(len(payment_export)))
-    payment_export.to_csv(f'{rel_dir}/Payment.csv', encoding='utf-8', index=False, header=True)
+        payment_export = adt.export_payment(source, job_ids)
+        print('Exported payments: ' + str(len(payment_export)))
+        payment_export.to_csv(f'{rel_dir}/Payment.csv', encoding='utf-8', index=False, header=True)
 
     ##### Subscriptions
     print('Subscriptions: ' + str(start_count_subscription))
-    subscriptions_export = adt.export_subscriptions(source, contact_ids)
-    if tag_id:
-        product_ids_from_subs = subscriptions_export['ProductId'].tolist()
-        product_ids.extend(product_ids_from_subs)
-        product_ids = list(set(product_ids))
-    print('Exported Subscriptions: ' + str(len(subscriptions_export)))
-    subscriptions_export.to_csv(f'{rel_dir}/Subscriptions.csv', encoding='utf-8', index=False, header=True)
+    if start_count_subscription != 0:
+        subscriptions_export = adt.export_subscriptions(source, contact_ids)
+        if tag_id:
+            product_ids_from_subs = subscriptions_export['ProductId'].tolist()
+            product_ids.extend(product_ids_from_subs)
+            product_ids = list(set(product_ids))
+        print('Exported Subscriptions: ' + str(len(subscriptions_export)))
+        subscriptions_export.to_csv(f'{rel_dir}/Subscriptions.csv', encoding='utf-8', index=False, header=True)
 
     ##### Products
     print('Products: ' + str(start_count_product))
